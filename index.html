@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Twenty One Pilots Song Bracket</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=Figtree:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+/* Layout idea: a fight-night card. One column, phone first. Red corner vs blue corner is the only loud thing. */
+:root{
+  --bg:#eceef0; --card:#ffffff; --ink:#14161a; --muted:#59606b; --line:#c9cdd3;
+  --red:#d2322a; --blue:#1d5bcc; --on-corner:#ffffff;
+  --display:"Big Shoulders Display","Arial Narrow",Impact,sans-serif;
+  --body:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#101216; --card:#1a1d23; --ink:#f0f1f3; --muted:#9aa1ac; --line:#2e323b;
+    --red:#e8483e; --blue:#3f7be6; --on-corner:#ffffff; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#101216; --card:#1a1d23; --ink:#f0f1f3; --muted:#9aa1ac; --line:#2e323b;
+  --red:#e8483e; --blue:#3f7be6; --on-corner:#ffffff; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.45}
+main{max-width:560px;margin:0 auto;padding:20px 16px 48px;display:flex;flex-direction:column;gap:20px}
+h1,h2,h3{font-family:var(--display);font-weight:900;text-transform:uppercase;line-height:.95;margin:0;text-wrap:balance;letter-spacing:.01em}
+h1{font-size:clamp(44px,14vw,72px)}
+h1 .vs{color:var(--red)}
+h2{font-size:26px}
+p{margin:0}
+.muted{color:var(--muted)}
+.small{font-size:14px}
+.rule{height:6px;background:linear-gradient(90deg,var(--red) 0 50%,var(--blue) 50% 100%);border-radius:3px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:12px}
+label.field{display:flex;flex-direction:column;gap:6px;font-weight:600}
+input[type=text],select{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:12px;width:100%}
+.albums{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+@media (max-width:380px){.albums{grid-template-columns:1fr}}
+.album{display:flex;align-items:center;gap:8px;padding:10px;border:1px solid var(--line);border-radius:8px;cursor:pointer;background:var(--bg);font-size:14px;font-weight:600}
+.album input{width:18px;height:18px;flex:none;accent-color:var(--ink)}
+.album .n{margin-left:auto;color:var(--muted);font-weight:400;font-variant-numeric:tabular-nums}
+.dot{width:10px;height:10px;border-radius:50%;flex:none;display:inline-block}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+button{font:inherit;cursor:pointer;color:var(--ink)}
+.btn{border:2px solid var(--ink);background:var(--ink);color:var(--bg);border-radius:8px;padding:14px 18px;font-family:var(--display);font-weight:900;font-size:22px;text-transform:uppercase;letter-spacing:.03em}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.btn.ghost{background:transparent;color:var(--ink);font-size:16px;padding:9px 13px;border-width:1px;border-color:var(--line)}
+.btn.wide{width:100%}
+:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+
+/* match */
+.round{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.round .count{font-variant-numeric:tabular-nums;color:var(--muted);font-size:14px;white-space:nowrap}
+.bar{height:6px;background:var(--line);border-radius:3px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--ink)}
+.ring{display:flex;flex-direction:column;gap:10px;position:relative}
+.corner{border:0;border-radius:12px;padding:18px 16px 16px;text-align:left;color:var(--on-corner);display:flex;flex-direction:column;gap:10px;min-height:150px;justify-content:space-between;transition:transform .15s,opacity .15s}
+.corner.red{background:var(--red)} .corner.blue{background:var(--blue)}
+.corner .tag{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;opacity:.85}
+.corner .song{font-family:var(--display);font-weight:900;font-size:clamp(30px,9.5vw,44px);line-height:.98;text-transform:uppercase;overflow-wrap:anywhere}
+.corner .from{font-size:14px;font-weight:600;display:flex;align-items:center;gap:8px}
+.corner .from .dot{border:2px solid rgba(255,255,255,.85)}
+.corner:active{transform:scale(.985)}
+.ring.picked .corner:not(.won){opacity:.25}
+.ring.picked .corner.won{transform:scale(1.02)}
+.versus{align-self:center;font-family:var(--display);font-weight:900;font-size:20px;background:var(--bg);border:2px solid var(--ink);border-radius:50%;width:44px;height:44px;display:grid;place-items:center;margin:-22px 0;z-index:1}
+.hear{display:flex;justify-content:space-between;gap:10px;font-size:14px}
+.hear a{color:var(--ink)}
+
+/* results + lists */
+.champ{background:var(--ink);color:var(--bg);border-radius:12px;padding:20px 16px;display:flex;flex-direction:column;gap:8px}
+.champ .song{font-family:var(--display);font-weight:900;font-size:clamp(40px,13vw,64px);line-height:.95;text-transform:uppercase;overflow-wrap:anywhere}
+.champ .tag{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;opacity:.75}
+ol,ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column}
+li.line{display:flex;gap:10px;align-items:baseline;padding:8px 0;border-top:1px solid var(--line);font-size:15px}
+li.line:first-child{border-top:0}
+li.line .k{color:var(--muted);font-size:13px;min-width:96px;flex:none}
+li.line .v{font-weight:600}
+li.line .a{margin-left:auto;color:var(--muted);font-size:13px;text-align:right}
+.albumhead{display:flex;align-items:center;gap:8px}
+.albumhead .yr{margin-left:auto;color:var(--muted);font-variant-numeric:tabular-nums}
+.tracks{columns:2;column-gap:16px;font-size:14px;display:block}
+.tracks li{padding:3px 0;break-inside:avoid}
+@media (max-width:380px){.tracks{columns:1}}
+#poster{width:100%;height:auto;border-radius:8px;border:1px solid var(--line);display:block;min-height:120px;background:var(--bg)}
+@media (prefers-reduced-motion:reduce){.corner{transition:none}}
+</style>
+</head>
+<body>
+<main id="app"></main>
+<script>
+const ALBUMS=[
+ {id:"st",name:"Twenty One Pilots",year:2009,color:"#7c6fd6",songs:["Implicit Demand for Proof","Fall Away","The Pantaloon","Addict with a Pen","Friend, Please","March to the Sea","Johnny Boy","Oh Ms Believer","Air Catcher","Trapdoor","A Car, a Torch, a Death","Taxi Cab","Before You Start Your Day","Isle of Flightless Birds"]},
+ {id:"rab",name:"Regional at Best",year:2011,color:"#2fa39a",songs:["Slowtown","Forest","Glowing Eyes","Kitchen Sink","Anathema","Lovely","Ruby","Be Concerned","Clear"]},
+ {id:"ves",name:"Vessel",year:2013,color:"#8d99a6",songs:["Ode to Sleep","Holding on to You","Migraine","House of Gold","Car Radio","Semi-Automatic","Screen","The Run and Go","Fake You Out","Guns for Hands","Trees","Truce"]},
+ {id:"bf",name:"Blurryface",year:2015,color:"#8f1d1d",songs:["Heavydirtysoul","Stressed Out","Ride","Fairly Local","Tear in My Heart","Lane Boy","The Judge","Doubt","Polarize","We Don't Believe What's on TV","Message Man","Hometown","Not Today","Goner"]},
+ {id:"tr",name:"Trench",year:2018,color:"#d4b106",songs:["Jumpsuit","Levitate","Morph","My Blood","Chlorine","Smithereens","Neon Gravestones","The Hype","Nico and the Niners","Cut My Lip","Bandito","Pet Cheetah","Legend","Leave the City"]},
+ {id:"sai",name:"Scaled and Icy",year:2021,color:"#49b8d8",songs:["Good Day","Choker","Shy Away","The Outside","Saturday","Never Take It","Mulberry Street","Formidable","Bounce Man","No Chances","Redecorate"]},
+ {id:"cl",name:"Clancy",year:2024,color:"#e0762a",songs:["Overcompensate","Next Semester","Backslide","Midwest Indigo","Routines in the Night","Vignette","The Craving (Jenna's Version)","Lavish","Navigating","Snap Back","Oldies Station","At the Risk of Feeling Dumb","Paladin Strait"]},
+ {id:"br",name:"Breach",year:2025,color:"#b4324e",songs:["City Walls","RAWFEAR","Drum Show","Garbage","The Contract","Downstairs","Robot Voices","Center Mass","Cottonwood","One Way","Days Lie Dormant","Tally","Intentions","Drag Path (bonus track)"]},
+ {id:"ex",name:"Singles & extras",year:null,color:"#5c8a3a",songs:["Time to Say Goodbye","Heathens","Cancer","Level of Concern","Christmas Saves the Year","The Line"]}
+];
+const SONG={};
+ALBUMS.forEach(a=>a.songs.forEach((t,i)=>{SONG[a.id+i]={title:t,album:a}}));
+const TOTAL=Object.keys(SONG).length;
+const KEY_GAME="top-bracket-game", KEY_HALL="top-bracket-hall";
+const store={
+  get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},
+  set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}},
+  del(k){try{localStorage.removeItem(k)}catch(e){}}
+};
+const today=()=>{const d=new Date(),z=n=>String(n).padStart(2,'0');return d.getFullYear()+'-'+z(d.getMonth()+1)+'-'+z(d.getDate())};
+const fresh=()=>({screen:"setup",player:"",sel:Object.fromEntries(ALBUMS.map(a=>[a.id,true])),size:"all",cur:[],next:[],i:0,log:[],undo:[],start:0,saved:false});
+let S=fresh();
+const app=document.getElementById("app");
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const pool=()=>ALBUMS.filter(a=>S.sel[a.id]).flatMap(a=>a.songs.map((_,i)=>a.id+i));
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+const roundName=n=>n<=2?"Final":n<=4?"Semifinals":n<=8?"Quarterfinals":"Round of "+n;
+const dot=a=>`<span class="dot" style="background:${a.color}"></span>`;
+const from=a=>esc(a.name)+(a.year?" · "+a.year:"");
+function save(){ if(S.screen==="setup") store.del(KEY_GAME); else store.set(KEY_GAME,S) }
+
+function startGame(){
+  let p=shuffle(pool());
+  if(S.size!=="all") p=p.slice(0,+S.size);
+  if(p.length<2) return;
+  S.player=(S.player||"").trim()||"Player";
+  S.cur=p; S.next=[]; S.i=0; S.log=[]; S.undo=[]; S.start=p.length; S.saved=false; S.screen="play";
+  save(); render(); window.scrollTo(0,0);
+}
+function pick(w){
+  const a=S.cur[2*S.i], b=S.cur[2*S.i+1];
+  S.undo.push({cur:S.cur.slice(),next:S.next.slice(),i:S.i,log:S.log.length});
+  S.log.push({n:S.cur.length,w,l:w===a?b:a});
+  S.next.push(w); S.i++;
+  if(S.i>=Math.floor(S.cur.length/2)){
+    if(S.cur.length%2) S.next.unshift(S.cur[S.cur.length-1]); // odd one out gets a bye
+    S.cur=S.next; S.next=[]; S.i=0;
+    if(S.cur.length===1){ S.screen="done"; finish(); }
+  }
+  save(); render();
+}
+function undo(){
+  const u=S.undo.pop(); if(!u) return;
+  S.cur=u.cur; S.next=u.next; S.i=u.i; S.log.length=u.log; S.screen="play"; save(); render();
+}
+function finish(){
+  if(S.saved) return; S.saved=true;
+  const hall=store.get(KEY_HALL,[]);
+  const last=S.log[S.log.length-1];
+  hall.unshift({player:S.player,champ:S.cur[0],second:last?last.l:null,of:S.start,when:today()});
+  store.set(KEY_HALL,hall.slice(0,30));
+}
+
+function viewSetup(){
+  const n=pool().length, hall=store.get(KEY_HALL,[]);
+  const sizes=[8,16,32,64].filter(x=>x<n);
+  if(S.size!=="all"&&!sizes.includes(+S.size)) S.size="all";
+  const playing=S.size==="all"?n:+S.size;
+  return `
+  <header style="display:flex;flex-direction:column;gap:12px">
+    <p class="small muted" style="font-weight:700;letter-spacing:.12em;text-transform:uppercase">Twenty One Pilots · family fight night</p>
+    <h1>Song <span class="vs">vs</span> Song</h1>
+    <div class="rule"></div>
+    <p>${TOTAL} songs go in. You pick a winner two at a time until one favorite is left standing.</p>
+  </header>
+  <section class="panel">
+    <label class="field" for="player">Who's picking?
+      <input type="text" id="player" maxlength="24" placeholder="Name" value="${esc(S.player)}" autocomplete="off">
+    </label>
+    <div style="display:flex;flex-direction:column;gap:6px">
+      <div class="row" style="justify-content:space-between"><strong>Albums in the bracket</strong>
+        <span class="row"><button class="btn ghost" data-act="all">All</button><button class="btn ghost" data-act="none">None</button></span></div>
+      <div class="albums">${ALBUMS.map(a=>`
+        <label class="album" for="al-${a.id}"><input type="checkbox" id="al-${a.id}" data-album="${a.id}" ${S.sel[a.id]?"checked":""}>${dot(a)}<span>${esc(a.name)}</span><span class="n">${a.songs.length}</span></label>`).join("")}
+      </div>
+    </div>
+    <label class="field" for="size">Bracket size
+      <select id="size">
+        <option value="all" ${S.size==="all"?"selected":""}>Every selected song (${n})</option>
+        ${sizes.map(x=>`<option value="${x}" ${+S.size===x?"selected":""}>Random ${x} songs</option>`).join("")}
+      </select>
+    </label>
+    <p class="small muted">${playing>=2?`${playing} songs, ${playing-1} matchups. Roughly ${Math.max(1,Math.round((playing-1)*6/60))} minutes.`:"Choose at least two songs."}</p>
+    <button class="btn wide" data-act="start" ${playing<2?"disabled":""}>Start the bracket</button>
+  </section>
+  ${hall.length?`<section class="panel">
+    <div class="row" style="justify-content:space-between"><h2>Champions so far</h2><button class="btn ghost" data-act="clearhall">Clear</button></div>
+    <ul>${hall.map(h=>SONG[h.champ]?`<li class="line"><span class="k">${esc(h.player)}</span><span class="v">${esc(SONG[h.champ].title)}</span><span class="a">of ${h.of}</span></li>`:"").join("")}</ul>
+    <p class="small muted">Saved on this device only.</p>
+  </section>`:""}
+  <section class="panel">
+    <h2>Every song, by album</h2>
+    ${ALBUMS.map(a=>`<div style="display:flex;flex-direction:column;gap:6px;border-top:1px solid var(--line);padding-top:12px">
+      <div class="albumhead">${dot(a)}<strong>${esc(a.name)}</strong><span class="yr">${a.year||""}</span></div>
+      <ul class="tracks">${a.songs.map(t=>`<li>${esc(t)}</li>`).join("")}</ul></div>`).join("")}
+    <p class="small muted">Songs that appear on both Regional at Best and Vessel are listed once, under Vessel.</p>
+  </section>`;
+}
+function cornerHTML(id,side){
+  const s=SONG[id];
+  return `<button class="corner ${side}" data-pick="${id}">
+    <span class="tag">${side} corner</span>
+    <span class="song">${esc(s.title)}</span>
+    <span class="from">${dot(s.album)}${from(s.album)}</span></button>`;
+}
+const yt=id=>`https://www.youtube.com/results?search_query=${encodeURIComponent("twenty one pilots "+SONG[id].title.replace(" (bonus track)",""))}`;
+function viewPlay(){
+  const a=S.cur[2*S.i], b=S.cur[2*S.i+1], m=Math.floor(S.cur.length/2);
+  const pct=Math.round(100*S.log.length/(S.start-1));
+  return `
+  <div class="row" style="justify-content:space-between">
+    <span class="small muted"><strong style="color:var(--ink)">${esc(S.player)}</strong> is picking</span>
+    <span class="row"><button class="btn ghost" data-act="undo" ${S.undo.length?"":"disabled"}>Undo</button><button class="btn ghost" data-act="quit">Quit</button></span>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:8px">
+    <div class="round"><h2>${roundName(S.cur.length)}</h2><span class="count">Match ${S.i+1} of ${m}</span></div>
+    <div class="bar" role="progressbar" aria-valuenow="${pct}" aria-valuemin="0" aria-valuemax="100" aria-label="Bracket progress"><i style="width:${pct}%"></i></div>
+  </div>
+  <div class="ring" id="ring">
+    ${cornerHTML(a,"red")}<div class="versus" aria-hidden="true">VS</div>${cornerHTML(b,"blue")}
+  </div>
+  <div class="hear">
+    <a href="${yt(a)}" target="_blank" rel="noopener">Hear the red corner</a>
+    <a href="${yt(b)}" target="_blank" rel="noopener">Hear the blue corner</a>
+  </div>
+  <p class="small muted">Tap the song you'd keep. ${S.start-1-S.log.length} matchups left.</p>`;
+}
+function viewDone(){
+  const c=S.cur[0], s=SONG[c], last=S.log[S.log.length-1];
+  const semis=S.log.filter(x=>x.n===4||x.n===3).map(x=>x.l);
+  const path=S.log.filter(x=>x.w===c);
+  return `
+  <p class="small muted" style="font-weight:700;letter-spacing:.12em;text-transform:uppercase">${esc(S.player)}'s bracket · ${S.start} songs</p>
+  <div class="champ"><span class="tag">Favorite song</span><span class="song">${esc(s.title)}</span><span>${from(s.album)}</span></div>
+  <div class="rule"></div>
+  <section class="panel"><h2>Podium</h2><ul>
+    ${last?`<li class="line"><span class="k">Runner-up</span><span class="v">${esc(SONG[last.l].title)}</span><span class="a">${esc(SONG[last.l].album.name)}</span></li>`:""}
+    ${semis.map(id=>`<li class="line"><span class="k">Final four</span><span class="v">${esc(SONG[id].title)}</span><span class="a">${esc(SONG[id].album.name)}</span></li>`).join("")}
+  </ul></section>
+  <section class="panel"><h2>The road to the title</h2><ul>
+    ${path.map(x=>`<li class="line"><span class="k">${roundName(x.n)}</span><span class="v">beat ${esc(SONG[x.l].title)}</span></li>`).join("")}
+  </ul></section>
+  <section class="panel"><h2>Keep this bracket</h2>
+    <img id="poster" alt="Results poster for ${esc(S.player)}'s bracket">
+    <div class="row"><button class="btn ghost" data-act="png">Download image</button><button class="btn ghost" data-act="csv">Download every matchup (CSV)</button></div>
+    <p class="small muted" id="dlmsg" role="status">The image shows the champion and the last rounds. The CSV lists all ${S.log.length} matchups.</p>
+  </section>
+  <button class="btn wide" data-act="nextplayer">Next player's turn</button>
+  <div class="row"><button class="btn ghost" data-act="undo">Undo last pick</button><button class="btn ghost" data-act="again">Same player, new draw</button></div>`;
+}
+function render(){
+  app.innerHTML = S.screen==="play"?viewPlay():S.screen==="done"?viewDone():viewSetup();
+  posterBlob=null;
+  if(S.screen==="done") makePoster().then(b=>{posterBlob=b;const im=document.getElementById("poster");if(im&&b)im.src=URL.createObjectURL(b)}).catch(()=>{});
+}
+
+/* ---------- downloads ---------- */
+let posterBlob=null, DL=null;
+try{ window.claude?.use?.("downloads").then(d=>{DL=d}).catch(()=>{}) }catch(e){}
+const fileBase=()=>((S.player||"player").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")||"player")+"-song-bracket";
+const clean=id=>SONG[id].title.replace(" (bonus track)","");
+function csvText(){
+  const q=v=>'"'+String(v).replace(/"/g,'""')+'"';
+  const rows=[["Match","Round","Winner","Winner album","Loser","Loser album"]];
+  S.log.forEach((x,i)=>rows.push([i+1,roundName(x.n),SONG[x.w].title,SONG[x.w].album.name,SONG[x.l].title,SONG[x.l].album.name]));
+  return rows.map(r=>r.map(q).join(",")).join("\r\n")+"\r\n";
+}
+async function makePoster(){
+  const W=1080, P=64, D='"Big Shoulders Display","Arial Narrow",Impact,sans-serif', B='"Figtree",system-ui,sans-serif';
+  try{ await Promise.all([document.fonts.load('900 60px "Big Shoulders Display"'),document.fonts.load('600 30px "Figtree"'),document.fonts.load('400 30px "Figtree"')]) }catch(e){}
+  const c=document.createElement("canvas"); c.width=W; c.height=5200;
+  const g=c.getContext("2d"); g.textBaseline="alphabetic";
+  const INK="#f0f1f3", MUT="#9aa1ac", RED="#e8483e", BLUE="#3f7be6", LINE="#2e323b";
+  g.fillStyle="#101216"; g.fillRect(0,0,W,c.height);
+  g.fillStyle=RED; g.fillRect(0,0,W/2,18); g.fillStyle=BLUE; g.fillRect(W/2,0,W/2,18);
+  let y=96;
+  const fit=(t,font,size,max,weight)=>{ let z=size; do{ g.font=weight+" "+z+"px "+font; if(g.measureText(t).width<=max) break; z-=2 }while(z>16); return z };
+  const wrap=(t,max)=>{ const out=[]; let line=""; t.split(" ").forEach(w=>{ const tr=line?line+" "+w:w; if(g.measureText(tr).width>max&&line){out.push(line);line=w}else line=tr }); if(line)out.push(line); return out };
+  const champ=S.cur[0], cs=SONG[champ];
+  g.fillStyle=MUT; g.font="700 26px "+B;
+  g.fillText((S.player+"'s bracket  \u00b7  "+S.start+" songs  \u00b7  "+today()).toUpperCase(),P,y); y+=70;
+  g.fillStyle=RED; g.font="700 26px "+B; g.fillText("FAVORITE SONG",P,y); y+=24;
+  g.fillStyle=INK; g.font="900 132px "+D;
+  wrap(clean(champ).toUpperCase(),W-2*P).forEach(l=>{ y+=124; g.fillText(l,P,y) });
+  y+=56; g.fillStyle=MUT; g.font="600 32px "+B; g.fillText(from(cs.album).replace("&amp;","&"),P,y); y+=56;
+  const rounds=[...new Set(S.log.map(x=>x.n))].filter(n=>n<=16).sort((a,b)=>a-b);
+  rounds.forEach(n=>{
+    g.fillStyle=LINE; g.fillRect(P,y,W-2*P,2); y+=62;
+    g.fillStyle=INK; g.font="900 52px "+D; g.fillText(roundName(n).toUpperCase(),P,y); y+=18;
+    S.log.filter(x=>x.n===n).forEach(x=>{
+      y+=50; const half=(W-2*P-90)/2;
+      g.fillStyle=INK; fit(clean(x.w),B,32,half,"700"); g.fillText(clean(x.w),P,y);
+      g.fillStyle=MUT; g.font="400 24px "+B; g.fillText("beat",P+half+18,y);
+      g.fillStyle=MUT; fit(clean(x.l),B,32,half,"400"); g.fillText(clean(x.l),P+half+90,y);
+    });
+    y+=44;
+  });
+  g.fillStyle=LINE; g.fillRect(P,y,W-2*P,2); y+=50;
+  g.fillStyle=MUT; g.font="600 24px "+B; g.fillText("SONG VS SONG  \u00b7  A FAN-MADE TWENTY ONE PILOTS BRACKET",P,y); y+=48;
+  const out=document.createElement("canvas"); out.width=W; out.height=y;
+  out.getContext("2d").drawImage(c,0,0);
+  return new Promise(r=>out.toBlob(r,"image/png"));
+}
+async function saveFile(filename,data){
+  const msg=t=>{const m=document.getElementById("dlmsg"); if(m) m.textContent=t};
+  if(!data){ msg("The image is still being drawn. Try again in a second."); return }
+  if(DL){
+    try{ await DL.save({filename,data}); msg("Saved "+filename+"."); return }
+    catch(e){
+      if(e&&e.code==="declined"){ msg("Download cancelled."); return }
+      if(e&&e.code==="rate_limited"){ msg("A download prompt is already open. Finish that one, then try again."); return }
+    }
+  }
+  try{
+    const blob=data instanceof Blob?data:new Blob([data],{type:"text/csv"});
+    const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download=filename;
+    document.body.appendChild(a); a.click(); a.remove();
+    msg("If nothing downloaded, press and hold the image above to save it.");
+  }catch(e){ msg("Downloads are blocked here. Press and hold the image above to save it.") }
+}
+let busy=false;
+app.addEventListener("click",e=>{
+  const p=e.target.closest("[data-pick]");
+  if(p){ if(busy) return; busy=true;
+    document.getElementById("ring").classList.add("picked"); p.classList.add("won");
+    setTimeout(()=>{busy=false;pick(p.dataset.pick)},220); return; }
+  const b=e.target.closest("[data-act]"); if(!b) return;
+  const act=b.dataset.act;
+  if(act==="start") startGame();
+  else if(act==="undo") undo();
+  else if(act==="all"||act==="none"){ALBUMS.forEach(a=>S.sel[a.id]=act==="all");render()}
+  else if(act==="quit"){const keep={player:S.player,sel:S.sel,size:S.size};S=Object.assign(fresh(),keep);save();render()}
+  else if(act==="again") startGame();
+  else if(act==="nextplayer"){const keep={sel:S.sel,size:S.size};S=Object.assign(fresh(),keep);save();render();window.scrollTo(0,0)}
+  else if(act==="png") saveFile(fileBase()+".png",posterBlob);
+  else if(act==="csv") saveFile(fileBase()+".csv",csvText());
+  else if(act==="clearhall"){store.del(KEY_HALL);render()}
+});
+app.addEventListener("change",e=>{
+  const t=e.target;
+  if(t.dataset.album){S.sel[t.dataset.album]=t.checked;render()}
+  else if(t.id==="size"){S.size=t.value;render()}
+});
+app.addEventListener("input",e=>{ if(e.target.id==="player") S.player=e.target.value });
+
+function valid(d){return d&&d.screen&&Array.isArray(d.cur)&&d.cur.every(id=>SONG[id])&&(d.screen==="setup"||d.cur.length>=1)}
+function boot(data){
+  const d=valid(data)?data:store.get(KEY_GAME,null);
+  if(valid(d)) S=Object.assign(fresh(),d);
+  render();
+}
+window.claude?.hot?.snapshot?.(()=>S);
+window.claude?.hot?.ready ? window.claude.hot.ready(boot) : boot(window.claude?.hot?.data ?? {});
+</script>
+</body>
+</html>
